@@ -1,2 +1,2 @@
 #!/bin/bash
-touch /tmp/betty > mv /tmp/my_directory/betty
+mv /tmp/betty /tmp/my_directory/
