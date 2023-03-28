@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Redirect
+SU=$(whoami)
+DIR="/etc/nginx/sites-available/default"
+NEW_URL="https://www.youtube.com/watch?v=snehh-hXoY8"
+OLD_URL="/redirect_me"
+REDIRECT="\tlocation ${OLD_URL} {\n\t\treturn 301 ${NEW_URL};\n\t}"
+
+if [[ "$SU" == "root" ]];
+then
+	SU="sudo"
+else
+	echo "You need run with sudo"
+	exit
+fi
+
+$SU apt-get -y update
+$SU apt-get -y install nginx
+
+
+$SU echo "Hello World" > ~/index.html
+$SU mkdir --parents /var/www/html/
+$SU cp ~/index.html /var/www/html/
+$SU sed -i "/server_name _;/ a\\${REDIRECT}" $DIR
+$SU service nginx restart
