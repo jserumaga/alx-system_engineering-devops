@@ -1,15 +1,4 @@
-#!/bin/bash
-
-# check if Nginx is running
-if ! systemctl status nginx &> /dev/null; then
-    # start Nginx if it is not running
-    sudo systemctl start nginx
-fi
-
-# check if Nginx is listening on port 80 for all active IPv4 IPs
-if ! sudo netstat -tlnp | grep ':80 ' | grep -q nginx; then
-    # update Nginx configuration to listen on port 80 for all active IPv4 IPs
-    sudo sed -i 's/listen\s\+80;/listen 80 default_server;/g' /etc/nginx/nginx.conf
-    sudo sed -i 's/#\s*server_name\s\+_/server_name _/g' /etc/nginx/nginx.conf
-    sudo systemctl reload nginx
-fi
+#!/usr/bin/env bash
+# Change port of 8080 to 80
+sudo sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
+sudo service nginx restart
