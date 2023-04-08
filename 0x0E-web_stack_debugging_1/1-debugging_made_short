@@ -1,0 +1,15 @@
+Here's a 5-line Bash script to configure a server to run Nginx and listen on port 80 for all active IPv4 IPs:
+
+bash
+Copy code
+#!/bin/bash
+
+if ! systemctl is-active nginx &> /dev/null; then
+    sudo systemctl start nginx
+fi
+
+if ! sudo netstat -tlnp | grep ':80 ' | grep -q nginx; then
+    sudo sed -i 's/listen\s\+80;/listen 80 default_server;/g' /etc/nginx/nginx.conf
+    sudo sed -i 's/#\s*server_name\s\+_/server_name _/g' /etc/nginx/nginx.conf
+    sudo systemctl reload nginx
+fi
